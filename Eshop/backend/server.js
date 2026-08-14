@@ -18,11 +18,14 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 // Connect to database
 connectDatabase();
 
-const server = app.listen(process.env.PORT, () => {
-  console.log(
-    `Server is working on http://localhost:${process.env.PORT}`
-  );
-});
+let server;
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  server = app.listen(process.env.PORT, () => {
+    console.log(`Server is working on http://localhost:${process.env.PORT}`);
+  });
+}
+
+module.exports = app;
 
 // Unhandled Promise Rejection
 process.on("unhandledRejection", (err) => {

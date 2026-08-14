@@ -14,6 +14,10 @@ app.use(
 );
 app.use("/", express.static("uploads"));
 
+app.get("/", (req, res) => {
+  res.send("Eshop API is running successfully!");
+});
+
 // Config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
