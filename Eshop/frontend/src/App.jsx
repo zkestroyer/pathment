@@ -1,38 +1,50 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { useDispatch } from 'react-redux';
+import API from './api/axios';
+import { LoadUserRequest, LoadUserSuccess, LoadUserFail } from './redux/userSlice';
 
-const Home = () => {
-  const navigate = useNavigate();
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center animate-slide-up">
-        <h1 className="text-5xl font-bold text-primary-900 mb-4">Welcome to Eshop</h1>
-        <p className="text-lg text-gray-600 mb-8">Premium Multi-Vendor Platform</p>
-        <button onClick={() => navigate('/products')} className="btn-primary">Start Shopping</button>
-      </div>
-    </div>
-  );
-};
-
-const Products = () => (
-  <div className="min-h-screen p-8 bg-gray-50">
-    <h1 className="text-4xl font-bold text-gray-900 mb-6">All Products</h1>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {/* Placeholder for products */}
-      <div className="card-premium">Product 1</div>
-      <div className="card-premium">Product 2</div>
-      <div className="card-premium">Product 3</div>
-    </div>
-  </div>
-);
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Cart from './pages/Cart';
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        dispatch(LoadUserRequest());
+        const { data } = await API.get('/user/getuser');
+        dispatch(LoadUserSuccess(data.user));
+      } catch (error) {
+        dispatch(LoadUserFail(error.response?.data?.message || 'Error loading user'));
+      }
+    };
+    loadUser();
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-      </Routes>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/cart" element={<Cart />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 };
