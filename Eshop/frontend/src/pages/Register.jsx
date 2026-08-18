@@ -17,7 +17,10 @@ const Register = () => {
     setError('');
 
     try {
-      await API.post('/user/create-user', { name, email, password });
+      const { data } = await API.post('/user/register', { name, email, password });
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');

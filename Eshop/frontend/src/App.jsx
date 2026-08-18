@@ -21,12 +21,15 @@ const App = () => {
 
   useEffect(() => {
     const loadUser = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return; // No token = not logged in, skip
       try {
         dispatch(LoadUserRequest());
-        const { data } = await API.get('/user/getuser');
+        const { data } = await API.get('/user/me');
         dispatch(LoadUserSuccess(data.user));
       } catch (error) {
         dispatch(LoadUserFail(error.response?.data?.message || 'Error loading user'));
+        localStorage.removeItem('token'); // Token expired/invalid
       }
     };
     loadUser();

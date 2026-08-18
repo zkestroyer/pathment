@@ -19,7 +19,10 @@ const Login = () => {
     setError('');
 
     try {
-      const { data } = await API.post('/user/login-user', { email, password });
+      const { data } = await API.post('/user/login', { email, password });
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
       dispatch(LoadUserSuccess(data.user));
       navigate('/');
     } catch (err) {

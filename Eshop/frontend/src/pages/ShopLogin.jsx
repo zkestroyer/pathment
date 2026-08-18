@@ -15,6 +15,9 @@ const ShopLogin = () => {
     try {
       const { data } = await API.post('/shop/login', { email, password });
       if (data.success) {
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         dispatch(LoadSellerSuccess(data.shop));
         navigate('/shop-dashboard');
       }
