@@ -27,7 +27,11 @@ exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.isSeller = catchAsyncErrors(async (req, res, next) => {
-  const { seller_token } = req.cookies;
+  let seller_token = req.cookies.seller_token;
+
+  if (!seller_token && req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    seller_token = req.headers.authorization.split(" ")[1];
+  }
 
   if (!seller_token) {
     return next(new ErrorHandler("Please login as seller to access this resource", 401));

@@ -30,6 +30,7 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
         cart: items,
         shippingAddress,
         user: req.user.id,
+        shopId, // Added this field
         totalPrice, // In a real system, calculate total per seller
         paymentInfo,
         paidAt: paymentInfo.status === "Succeeded" ? Date.now() : undefined,
@@ -50,6 +51,20 @@ exports.createOrder = catchAsyncErrors(async (req, res, next) => {
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   try {
     const orders = await Order.find({ user: req.params.userId }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      orders,
+    });
+  } catch (error) {
+    return next(new ErrorHandler(error.message, 500));
+  }
+});
+
+// Get all orders of a seller
+exports.getShopOrders = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const orders = await Order.find({ shopId: req.params.shopId }).sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
