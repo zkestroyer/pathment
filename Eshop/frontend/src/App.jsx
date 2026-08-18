@@ -12,6 +12,9 @@ import ProductDetail from './pages/ProductDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import ShopDashboard from './pages/ShopDashboard';
+import ShopLogin from './pages/ShopLogin';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,6 +44,9 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/shop-dashboard" element={<ShopDashboard />} />
+            <Route path="/shop-login" element={<ShopLogin />} />
           </Routes>
         </main>
         <Footer />

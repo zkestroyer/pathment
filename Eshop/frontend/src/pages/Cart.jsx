@@ -107,9 +107,9 @@ const Cart = () => {
               </div>
             </div>
             
-            <button className="w-full btn-primary py-3 flex justify-center items-center">
+            <Link to="/checkout" className="w-full btn-primary py-3 flex justify-center items-center">
               Proceed to Checkout
-            </button>
+            </Link>
           </div>
         </div>
       </div>
