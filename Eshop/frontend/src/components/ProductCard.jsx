@@ -19,6 +19,7 @@ const ProductCard = ({ id, name, price, description, images, ratings, shopName }
       qty: 1,
       stock: 10 // Assuming some stock
     }));
+    alert(`${name} added to cart!`);
   };
 
   const handleCardClick = () => {
