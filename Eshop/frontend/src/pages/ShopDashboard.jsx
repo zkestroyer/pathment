@@ -42,7 +42,10 @@ const ShopDashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold mb-8">Seller Dashboard</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Seller Dashboard</h1>
+        <a href="/create-product" className="btn-primary px-4 py-2 text-sm">+ Add New Product</a>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="card-premium p-6">
           <h2 className="text-xl font-bold mb-4">Your Products</h2>

@@ -51,8 +51,12 @@ const ShopLogin = () => {
           />
         </div>
         <button type="submit" className="w-full btn-primary py-2">Login as Seller</button>
-        <p className="mt-4 text-center">
-          Test Account: store@eshop.com / password123
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Don't have a shop?{' '}
+          <Link to="/shop-register" className="font-medium text-accent hover:text-primary-500">Register here</Link>
+        </p>
+        <p className="mt-2 text-center text-xs text-gray-400">
+          Test: store@eshop.com / password123
         </p>
       </form>
     </div>

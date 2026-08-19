@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { useSelector } from 'react-redux';
-import { FiShoppingCart, FiUser, FiMenu, FiX } from 'react-icons/fi';
+import { useSelector, useDispatch } from 'react-redux';
+import { FiShoppingCart, FiUser, FiMenu, FiX, FiPackage, FiLogOut } from 'react-icons/fi';
+import { LoadUserFail } from '../redux/userSlice';
 
 const Navbar = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    dispatch(LoadUserFail('Logged out'));
+    setShowDropdown(false);
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-glass">
@@ -26,6 +35,9 @@ const Navbar = () => {
             
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
+                <Link to="/my-orders" className="relative p-2 text-gray-700 hover:text-accent transition-colors" title="My Orders">
+                  <FiPackage className="h-6 w-6" />
+                </Link>
                 <Link to="/cart" className="relative p-2 text-gray-700 hover:text-accent transition-colors">
                   <FiShoppingCart className="h-6 w-6" />
                   {cart && cart.length > 0 && (
@@ -35,13 +47,25 @@ const Navbar = () => {
                   )}
                 </Link>
                 <div className="relative">
-                  <button className="flex items-center space-x-2 p-2 text-gray-700 hover:text-accent transition-colors">
+                  <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center space-x-2 p-2 text-gray-700 hover:text-accent transition-colors">
                     {user?.avatar?.url ? (
                       <img src={user.avatar.url} alt="avatar" className="w-8 h-8 rounded-full object-cover" />
                     ) : (
                       <FiUser className="h-6 w-6" />
                     )}
                   </button>
+                  {showDropdown && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border">
+                      <div className="px-4 py-2 border-b">
+                        <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
+                        <p className="text-xs text-gray-500">{user?.email}</p>
+                      </div>
+                      <Link to="/my-orders" onClick={() => setShowDropdown(false)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Orders</Link>
+                      <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
+                        <FiLogOut className="w-4 h-4" /> Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -70,10 +94,12 @@ const Navbar = () => {
           <div className="pt-2 pb-3 space-y-1">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50">Home</Link>
             <Link to="/products" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50">Products</Link>
+            <Link to="/shop-login" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50">Become a Seller</Link>
             {isAuthenticated ? (
               <>
+                <Link to="/my-orders" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50">My Orders</Link>
                 <Link to="/cart" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-accent hover:bg-gray-50">Cart ({cart?.length || 0})</Link>
-                <div className="block px-3 py-2 text-base font-medium text-gray-700">Profile</div>
+                <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="block w-full text-left px-3 py-2 text-base font-medium text-red-600 hover:bg-red-50">Logout</button>
               </>
             ) : (
               <>

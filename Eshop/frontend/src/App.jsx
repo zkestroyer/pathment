@@ -15,6 +15,9 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import ShopDashboard from './pages/ShopDashboard';
 import ShopLogin from './pages/ShopLogin';
+import ShopRegister from './pages/ShopRegister';
+import CreateProduct from './pages/CreateProduct';
+import MyOrders from './pages/MyOrders';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -22,14 +25,14 @@ const App = () => {
   useEffect(() => {
     const loadUser = async () => {
       const token = localStorage.getItem('token');
-      if (!token) return; // No token = not logged in, skip
+      if (!token) return;
       try {
         dispatch(LoadUserRequest());
         const { data } = await API.get('/user/me');
         dispatch(LoadUserSuccess(data.user));
       } catch (error) {
         dispatch(LoadUserFail(error.response?.data?.message || 'Error loading user'));
-        localStorage.removeItem('token'); // Token expired/invalid
+        localStorage.removeItem('token');
       }
     };
     loadUser();
@@ -41,6 +44,7 @@ const App = () => {
         <Navbar />
         <main className="flex-grow">
           <Routes>
+            {/* Buyer Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetail />} />
@@ -48,8 +52,13 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/shop-dashboard" element={<ShopDashboard />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+
+            {/* Seller Routes */}
             <Route path="/shop-login" element={<ShopLogin />} />
+            <Route path="/shop-register" element={<ShopRegister />} />
+            <Route path="/shop-dashboard" element={<ShopDashboard />} />
+            <Route path="/create-product" element={<CreateProduct />} />
           </Routes>
         </main>
         <Footer />
